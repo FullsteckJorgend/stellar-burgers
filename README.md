@@ -19,7 +19,7 @@
 
 ## Технологии
 
-- React 18+ (--)
+- React 18+ ( ͡° ͜ʖ ͡°)
 - TypeScript
 - Redux Toolkit
 - React Router
