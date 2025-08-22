@@ -1,19 +1,53 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
-import { useSelector } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
+import {
+  clearCurrentOrder,
+  fetchOrderByNumber
+} from '../../services/orderSlice';
+import { useLocation, useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
-  const orders = useSelector((state) => state.feed.orders);
-  const id = location.pathname.split('/').pop();
-  const order = orders.find((item) => item.number === Number(id));
+  /**
+   * Компонент OrderInfo
+   *
+   * ВНИМАНИЕ:
+   * - Для выбора нужного массива заказов используйте обычный if/else после вызова useSelector.
+   * - Компонент отображает детали заказа по id из URL.
+   *
+   * ПРИМЕЧАНИЕ:
+   * - Я знаю что можно было использовать switch case, но в данном случае это нецелесообразно, А так если в будущем появится больше путей, то можно будет легко добавить новый case.
+   */
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const { number } = useParams<{ number: string }>();
+  const orderNumber = Number(number);
+  const feedOrders = useSelector((s) => s.feed.orders);
+  const userOrders = useSelector((s) => s.order.orders);
+  const currentOrder = useSelector((s) => s.order.currentOrder);
+  const ingredients: TIngredient[] = useSelector((s) => s.ingredients.items);
 
-  const orderData = order;
+  const localOrder = useMemo(() => {
+    let found =
+      feedOrders.find((o) => o.number === orderNumber) ||
+      userOrders.find((o) => o.number === orderNumber) ||
+      null;
+    return found;
+  }, [feedOrders, userOrders, orderNumber]);
 
-  const ingredients: TIngredient[] = useSelector(
-    (state) => state.ingredients.items
-  );
+  const orderData = localOrder || currentOrder;
+
+  useEffect(() => {
+    if (!localOrder && (!currentOrder || currentOrder.number !== orderNumber)) {
+      dispatch(fetchOrderByNumber(orderNumber));
+    }
+
+    return () => {
+      dispatch(clearCurrentOrder());
+    };
+  }, [dispatch, orderNumber, localOrder]);
 
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
@@ -60,5 +94,7 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  const inModal = !!location.state?.background;
+
+  return <OrderInfoUI orderInfo={orderInfo} inModal={inModal} />;
 };

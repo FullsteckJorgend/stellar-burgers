@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
@@ -15,6 +15,7 @@ export const BurgerConstructor: FC = () => {
 
   const orderRequest = useSelector((state) => state.order.loading);
   const orderModalData = useSelector((state) => state.order.currentOrder);
+  const [isOrderModalOpen, setOrderModalOpen] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,11 +36,13 @@ export const BurgerConstructor: FC = () => {
           )
         )
       );
+      setOrderModalOpen(true);
       dispatch(clearConstructor());
     }
   };
 
   const closeOrderModal = () => {
+    setOrderModalOpen(false);
     dispatch(clearCurrentOrder());
   };
 
@@ -59,6 +62,7 @@ export const BurgerConstructor: FC = () => {
       orderRequest={orderRequest}
       constructorItems={constructorItems}
       orderModalData={orderModalData}
+      isOrderModalOpen={isOrderModalOpen}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
     />

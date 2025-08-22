@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from '../../../services/store';
+import { useSelector } from '../../services/store';
 import { Navigate, useLocation } from 'react-router-dom';
 
 type ProtectedProps = {
@@ -22,7 +22,7 @@ const Protected = ({
   if (onlyUnAuth && user) {
     // для неавторизованного и авторизован
     const { from } = location.state ?? { from: { pathname: '/' } };
-    return <Navigate to={from} />;
+    return <Navigate to='/' replace />;
   }
   return component;
 };

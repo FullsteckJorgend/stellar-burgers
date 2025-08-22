@@ -1,7 +1,7 @@
 import { setCookie, getCookie } from './cookie';
 import { TIngredient, TOrder, TOrdersData, TUser } from './types';
 
-const URL = process.env.REACT_APP_BURGER_API_URL;
+const URL = process.env.BURGER_API_URL;
 
 const saveTokens = (accessToken: string, refreshToken: string) => {
   localStorage.setItem('refreshToken', refreshToken);

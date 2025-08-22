@@ -1,12 +1,16 @@
 import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
 import { TOrder } from '@utils-types';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { fetchFeeds } from '../../services/feedSlice';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchFeeds());
+  }, []);
 
   const orders: TOrder[] = useSelector((state) => state.feed.orders);
 
