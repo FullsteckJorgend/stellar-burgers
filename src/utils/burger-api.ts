@@ -3,6 +3,16 @@ import { TIngredient, TOrder, TOrdersData, TUser } from './types';
 
 const URL = process.env.BURGER_API_URL;
 
+const saveTokens = (accessToken: string, refreshToken: string) => {
+  localStorage.setItem('refreshToken', refreshToken);
+  setCookie('accessToken', accessToken);
+};
+
+const clearTokens = () => {
+  localStorage.removeItem('refreshToken');
+  setCookie('accessToken', '', { expires: -1 });
+};
+
 const checkResponse = <T>(res: Response): Promise<T> =>
   res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 
@@ -153,7 +163,10 @@ export const registerUserApi = (data: TRegisterData) =>
   })
     .then((res) => checkResponse<TAuthResponse>(res))
     .then((data) => {
-      if (data?.success) return data;
+      if (data?.success) {
+        saveTokens(data.accessToken, data.refreshToken);
+        return data;
+      }
       return Promise.reject(data);
     });
 
@@ -172,7 +185,10 @@ export const loginUserApi = (data: TLoginData) =>
   })
     .then((res) => checkResponse<TAuthResponse>(res))
     .then((data) => {
-      if (data?.success) return data;
+      if (data?.success) {
+        saveTokens(data.accessToken, data.refreshToken);
+        return data;
+      }
       return Promise.reject(data);
     });
 
@@ -232,4 +248,7 @@ export const logoutApi = () =>
     body: JSON.stringify({
       token: localStorage.getItem('refreshToken')
     })
-  }).then((res) => checkResponse<TServerResponse<{}>>(res));
+  }).then((res) => {
+    checkResponse<TServerResponse<{}>>(res);
+    clearTokens;
+  });

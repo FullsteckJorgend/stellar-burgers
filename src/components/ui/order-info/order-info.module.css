@@ -2,6 +2,12 @@
   margin: 0 auto;
   width: 640px;
 }
+
+.wrap_no_modal {
+  margin: 120px auto;
+  width: 640px;
+}
+
 .number {
   text-align: center;
 }
