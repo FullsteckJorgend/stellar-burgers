@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TUser } from '.././utils/types';
+import { TUser } from '../../../utils/types';
 import {
   forgotPasswordApi,
   getUserApi,
@@ -10,7 +10,7 @@ import {
   TLoginData,
   TRegisterData,
   updateUserApi
-} from '@api';
+} from '../../../utils/burger-api';
 
 type UserState = {
   user: TUser | null;

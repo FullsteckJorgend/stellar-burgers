@@ -23,8 +23,7 @@ import {
 import { OnlyAuth, OnlyUnAuth } from '../protectedRoute/protectedRoute';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
-import { fetchIngredients } from '../../services/ingredientsSlice';
-import { fetchOrders } from '../../services/orderSlice';
+import { fetchIngredients } from '../../services/slice/ingredients/ingredientsSlice';
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -39,7 +38,6 @@ export const App = () => {
 
   useEffect(() => {
     dispatch(fetchIngredients());
-    dispatch(fetchOrders());
   }, []);
 
   return (
