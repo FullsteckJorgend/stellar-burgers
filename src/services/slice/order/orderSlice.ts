@@ -13,7 +13,7 @@ type OrderState = {
   error: string | null;
 };
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   orders: [],
   currentOrder: null,
   loading: false,

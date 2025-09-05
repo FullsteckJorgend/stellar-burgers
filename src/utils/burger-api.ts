@@ -250,5 +250,5 @@ export const logoutApi = () =>
     })
   }).then((res) => {
     checkResponse<TServerResponse<{}>>(res);
-    clearTokens;
+    clearTokens();
   });
