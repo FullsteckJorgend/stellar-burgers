@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TUser } from '.././utils/types';
+import { TUser } from '../../../utils/types';
 import {
   forgotPasswordApi,
   getUserApi,
@@ -10,7 +10,8 @@ import {
   TLoginData,
   TRegisterData,
   updateUserApi
-} from '@api';
+} from '../../../utils/burger-api';
+import { getCookie } from '../../../utils/cookie';
 
 type UserState = {
   user: TUser | null;
@@ -21,7 +22,7 @@ type UserState = {
   passwordResetCompleted: boolean;
 };
 
-const initialState: UserState = {
+export const initialState: UserState = {
   user: null,
   isAuthenticated: false,
   loading: false,
@@ -114,6 +115,8 @@ export const logoutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await logoutApi();
+      console.log(localStorage.getItem('refreshToken'));
+      console.log(getCookie('accessToken'));
       return true;
     } catch (err) {
       return rejectWithValue(err);
