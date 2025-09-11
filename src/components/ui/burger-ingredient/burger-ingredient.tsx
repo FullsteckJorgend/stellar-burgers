@@ -16,11 +16,11 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
 
     return (
       <li className={styles.container}>
-        {/* ТУТ, ЦЕ ПАДЛА ТУТ */}
         <Link
           className={styles.article}
           to={`/ingredients/${_id}`}
           state={locationState}
+          data-cy='open-modal-link'
         >
           {count && <Counter count={count} />}
           <img className={styles.img} src={image} alt='картинка ингредиента.' />
